@@ -1,17 +1,17 @@
 import { useReducer, useEffect } from 'react';
 import axios from 'axios';
 
-const BASEURL = 'https://jobs.github.com/positions.json';
+const BASEURL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json';
 
 const ACTIONS = {
     MAKE_REQUEST: 'MAKE_REQUEST',
-    GET_DATA: 'GETz_DATA',
+    GET_DATA: 'GET_DATA',
     ERROR: 'ERROR'
 }
 
 const reducer = (state, action) => {
-    switch (ACTIONS.type) {
-        case action.MAKE_REQUEST:
+    switch (action.type) {
+        case ACTIONS.MAKE_REQUEST:
             return {
                 loading: true,
                 jobs: []
@@ -38,24 +38,16 @@ const reducer = (state, action) => {
 
 
 const FetchJobs = (params, page) => {
-    const [state, dispatch] = useReducer(reducer,
-        {
-            jobs: [],
-            loading: true
-        });
-    dispatch({
-        type: 'hello', payload: { x: 3 }
-    })
+    const [state, dispatch] = useReducer(reducer, {
+        jobs: [],
+        loading: true,
+    });
 
     useEffect(() => {
         dispatch({ type: ACTIONS.MAKE_REQUEST });
 
         axios.get(BASEURL, {
-            params: {
-                makedown: true,
-                page: page,
-                ...params
-            }
+            params: { makedown: true, page: page, ...params }
         }).then(res => {
             dispatch({
                 type: ACTIONS.GET_DATA,
@@ -64,18 +56,12 @@ const FetchJobs = (params, page) => {
         }).catch(err => {
             dispatch({
                 type: ACTIONS.ERROR,
-                payload: {
-                    error: err
-                }
+                payload: { error: err }
             })
         })
     }, [params, page])
 
-    return {
-        jobs: [],
-        loading: false,
-        error: false
-    };
+    return state;
 }
 
 export default FetchJobs;
