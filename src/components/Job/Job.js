@@ -18,7 +18,7 @@ const Job = ({ job }) => {
                         <Badge variant="info" className="mr-2">{job.type}</Badge>
                         <Badge variant="info">{job.location}</Badge>
                         <div style={{ wordBreak: 'break-all' }}>
-                            <ReactMarkDown source={job.how_to_apply} />
+                            <ReactMarkDown escapeHtml={false} source={job.how_to_apply} />
                         </div>
                     </div>
                     <div className="d-none d-md-block">
