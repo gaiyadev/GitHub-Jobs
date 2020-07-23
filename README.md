@@ -14,6 +14,7 @@ npm install or yarn install
 
 + Job Search
 + Job Application
++ Pagination
 
 
 ## Contributing
