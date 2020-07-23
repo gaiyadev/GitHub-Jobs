@@ -35,8 +35,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 hasNextPage: action.payload.hasNextPage
-            }
-
+            };
         default:
             return state;
     }
@@ -50,10 +49,10 @@ const FetchJobs = (params, page) => {
     });
 
     useEffect(() => {
-        const cancelToken = axios.CancelToken.source();
+        const cancelToken1 = axios.CancelToken.source();
         dispatch({ type: ACTIONS.MAKE_REQUEST });
         axios.get(BASEURL, {
-            cancelToken: cancelToken.token,
+            cancelToken: cancelToken1.token,
             params: { makedown: true, page: page, ...params }
         }).then(res => {
             dispatch({
@@ -68,9 +67,28 @@ const FetchJobs = (params, page) => {
             })
         })
 
+        //handle pagination
+        const cancelToken2 = axios.CancelToken.source();
+        axios.get(BASEURL, {
+            cancelToken: cancelToken2.token,
+            params: { makedown: true, page: page + 1, ...params }
+        }).then(res => {
+            dispatch({
+                type: ACTIONS.UPDATE_HAS_NEXT_PAGE,
+                payload: { hasNextPage: res.data.length !== 0 }
+            })
+        }).catch(err => {
+            if (axios.isCancel(err)) return;
+            dispatch({
+                type: ACTIONS.ERROR,
+                payload: { error: err }
+            })
+        })
+
 
         return () => {
-            cancelToken.cancel();
+            cancelToken1.cancel();
+            cancelToken2.cancel();
         }
     }, [params, page])
 
