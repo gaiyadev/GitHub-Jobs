@@ -1,13 +1,14 @@
 import { useReducer, useEffect } from 'react';
 import axios from 'axios';
+import { act } from '@testing-library/react';
 
 const BASEURL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json';
-
 const ACTIONS = {
     MAKE_REQUEST: 'MAKE_REQUEST',
     GET_DATA: 'GET_DATA',
-    ERROR: 'ERROR'
-}
+    ERROR: 'ERROR',
+    UPDATE_HAS_NEXT_PAGE: 'UPDATE_HAS_NEXT_PAGE'
+};
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -30,6 +31,11 @@ const reducer = (state, action) => {
                 error: action.payload.error,
                 jobs: []
             };
+        case ACTIONS.UPDATE_HAS_NEXT_PAGE:
+            return {
+                ...state,
+                hasNextPage: action.payload.hasNextPage
+            }
 
         default:
             return state;
@@ -61,6 +67,8 @@ const FetchJobs = (params, page) => {
                 payload: { error: err }
             })
         })
+
+
         return () => {
             cancelToken.cancel();
         }

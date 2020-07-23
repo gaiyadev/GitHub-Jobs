@@ -10,7 +10,7 @@ const Job = ({ job }) => {
                 <div className="d-flex justify-content-between">
                     <div>
                         <Card.Title>
-                            {job.title}- <span className="text-muted font-weight-light"> {job.company} </span>
+                            {job.title} - <span className="text-muted font-weight-light"> {job.company} </span>
                         </Card.Title>
                         <Card.Subtitle className="text-muted mb-2">
                             {new Date(job.created_at).toLocaleDateString()}
@@ -26,7 +26,7 @@ const Job = ({ job }) => {
                     </div>
                 </div>
                 <Card.Text>
-                    <Button onClick={() => setOpen(prevOpen => !prevOpen)} variant="primary">
+                    <Button className="mt-4" onClick={() => setOpen(prevOpen => !prevOpen)} variant="primary">
                         {open ? 'Hide Details' : 'Open Details'}
                     </Button>
                 </Card.Text>
@@ -38,6 +38,6 @@ const Job = ({ job }) => {
             </Card.Body>
         </Card>
     );
-}
+};
 
 export default Job;
