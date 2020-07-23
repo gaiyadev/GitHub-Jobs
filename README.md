@@ -1,6 +1,6 @@
 # GitHub Jobs
 
-GitHub Jobs is a ReactJs Application that uses GitHub Jobs API to fetch Jobs and Display to End User. Users can apply for job as well .
+GitHub Jobs is a ReactJs Application that uses GitHub Jobs API to fetch Jobs and Display to the End User. Users can apply for job as well .
 
 ## Installation
 
