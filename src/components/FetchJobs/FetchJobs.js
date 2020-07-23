@@ -15,13 +15,13 @@ const reducer = (state, action) => {
             return {
                 loading: true,
                 jobs: []
-            }
+            };
         case ACTIONS.GET_DATA:
             return {
                 ...state,
                 loading: false,
                 jobs: action.payload.jobs
-            }
+            };
 
         case ACTIONS.ERROR:
             return {
@@ -29,7 +29,7 @@ const reducer = (state, action) => {
                 loading: false,
                 error: action.payload.error,
                 jobs: []
-            }
+            };
 
         default:
             return state;
@@ -44,9 +44,10 @@ const FetchJobs = (params, page) => {
     });
 
     useEffect(() => {
+        const cancelToken = axios.CancelToken.source();
         dispatch({ type: ACTIONS.MAKE_REQUEST });
-
         axios.get(BASEURL, {
+            cancelToken: cancelToken.token,
             params: { makedown: true, page: page, ...params }
         }).then(res => {
             dispatch({
@@ -54,11 +55,15 @@ const FetchJobs = (params, page) => {
                 payload: { jobs: res.data }
             })
         }).catch(err => {
+            if (axios.isCancel(err)) return;
             dispatch({
                 type: ACTIONS.ERROR,
                 payload: { error: err }
             })
         })
+        return () => {
+            cancelToken.cancel();
+        }
     }, [params, page])
 
     return state;
